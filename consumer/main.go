@@ -5,13 +5,13 @@ import (
 	"os"
 	"os/signal"
 
-	kafka "github.com/IBM/sarama"
+	"github.com/IBM/sarama"
 )
 
 func main() {
-	config := kafka.NewConfig()
+	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
-	consumer, err := kafka.NewConsumer([]string{"localhost:9092"}, config)
+	consumer, err := sarama.NewConsumer([]string{"localhost:9092"}, config)
 	if err != nil {
 		log.Fatalf("Failed to connect to kafka consumer: %v", err)
 	}
@@ -21,7 +21,7 @@ func main() {
 		}
 	}()
 
-	partitionConsumer, err := consumer.ConsumePartition("orders", 0, kafka.OffsetNewest)
+	partitionConsumer, err := consumer.ConsumePartition("orders", 0, sarama.OffsetNewest)
 	if err != nil {
 		log.Fatalf("Failed to consume partition: %v", err)
 	}

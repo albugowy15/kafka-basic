@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"time"
 
-	kafka "github.com/IBM/sarama"
+	"github.com/IBM/sarama"
 	"github.com/google/uuid"
 )
 
@@ -42,11 +42,11 @@ func randomOrder() Order {
 }
 
 func main() {
-	config := kafka.NewConfig()
+	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
 	config.Producer.Return.Errors = true
 
-	producer, err := kafka.NewAsyncProducer([]string{"localhost:9092"}, config)
+	producer, err := sarama.NewAsyncProducer([]string{"localhost:9092"}, config)
 	if err != nil {
 		log.Fatalf("❌ Failed to connect to Kafka: %v", err)
 	}
@@ -92,13 +92,13 @@ func main() {
 	}
 }
 
-func sendOrder(producer kafka.AsyncProducer) {
+func sendOrder(producer sarama.AsyncProducer) {
 	order := randomOrder()
 	value, _ := order.Encode()
 
-	msg := &kafka.ProducerMessage{
+	msg := &sarama.ProducerMessage{
 		Topic:    "orders",
-		Value:    kafka.ByteEncoder(value),
+		Value:    sarama.ByteEncoder(value),
 		Metadata: order,
 	}
 
